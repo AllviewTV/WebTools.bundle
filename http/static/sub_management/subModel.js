@@ -2,7 +2,7 @@
     this.settingsVisible = false;
     this.settingsLoading = false;
     this.defaultSettings = {
-        HideWithoutSub: false,
+        HideWithoutSubs: false,
         Take: 20
     };
     this.settings = angular.copy(this.defaultSettings);
