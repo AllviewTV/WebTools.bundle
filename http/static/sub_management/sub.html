@@ -7,17 +7,52 @@
 
     <content-loading ng-if="webtoolsModel.subLoading" class="pushTopMinor"></content-loading>
     <div ng-if="!webtoolsModel.subLoading" class="pushTopMinor">
+        
+        <div class="pushTopMinor settings" ng-class="{'hideFields' : !subModel.settingsVisible}">
+            <div class="row toggleSettings">
+                <div class="col-xs-12">
+                    <div class="pull-right">
+                        <label for="showSettings" translate>Show settings</label>
+                        <button id="showSettings" ng-click="subModel.settingsVisible = !subModel.settingsVisible" ng-title="lang.hideShowSettingsMenu|translate"><i class="fa" ng-class="{'fa-eye-slash' : !subModel.settingsVisible, 'fa-eye' : subModel.settingsVisible}" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <input id="HideWithoutSub" type="checkbox" ng-model="subModel.settings.HideWithoutSub" />
+                    <label for="HideWithoutSub" translate>Hide media without subtitles</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <label for="Take" translate>Items to fetch</label><br />
+                    <input id="Take" class="take" type="number" ng-model="subModel.settings.Take" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-right">
+                        <label for="resetSettings" translate>Reset settings</label>
+                        <button id="resetSettings" ng-click="resetSettings()" ng-title="lang.resetSettings|translate"><i class="fa" ng-class="{'fa-spinner' : subModel.settingsLoading, 'fa-undo' : !subModel.settingsLoading}" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="pull-right">
+                        <label for="saveSettings" translate>Save settings</label>
+                        <button id="saveSettings" ng-click="saveSettings()" ng-title="lang.saveSettings|translate"><i class="fa" ng-class="{'fa-spinner' : subModel.settingsLoading, 'fa-floppy-o' : !subModel.settingsLoading}" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
 
         <div ng-if="!subModel.selectedSub">
             <div class="search">
                 <input class="searchInput" ng-enter="searchSub()" ng-model="subModel.searchValue" ng-placeholder="searchPlaceholder|translate"
                     ng-disabled="!isAnyShowExpanded()" />
                 <button class="btnSearch" ng-click="searchSub()" title="Search" ng-disabled="!isAnyShowExpanded()"><i class="fa fa-search" aria-hidden="true"></i></button>
-            </div>
-
-            <div class="settings">
-                <input id="hideWithoutSubs" type="checkbox" ng-model="subModel.settings.hideWithoutSub" ng-change="filterSub()" />
-                <label for="hideWithoutSubs" translate>Hide media without subtitles</label>
             </div>
 
             <div class="row rowShow" ng-repeat="show in subModel.shows track by show.key | orderBy : 'title'" ng-class="{'expanded': show.expanded}">

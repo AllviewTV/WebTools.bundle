@@ -3,6 +3,10 @@
 
     $scope.translate = function () {
         var lang = {
+            resetSettings: gettext("Reset settings"),
+            saveSettings: gettext("Save settings"),
+            hideShowSettingsMenu: gettext("Hide/Show settings menu"),
+
             searchPlaceholder: gettext("Search..."),
             searchKeyword: gettext("Search keyword"),
             clearSearch: gettext("Clear search"),
@@ -34,6 +38,17 @@
         subService.getShows();
     }
 
+    $scope.resetSettings = function () {
+        subService.resetSettings(function () {
+            $scope.searchSub();
+        });
+    }
+    $scope.saveSettings = function () {
+        subService.setSettings(function () {
+            $scope.searchSub();
+        });
+    }
+
     $scope.isAnyShowExpanded = function () {
         var isExpanded = false;
         for (var i = 0; i < subModel.shows.length; i++) {
@@ -44,12 +59,6 @@
         if (isExpanded) $scope.searchPlaceholder = $scope.lang.search;
         else $scope.searchPlaceholder = $scope.lang.expandShowToSearch;
         return isExpanded;
-    }
-
-    $scope.filterSub = function () {
-        subService.setSettings(function () {
-            $scope.searchSub();
-        });
     }
 
     $scope.searchSub = function () {

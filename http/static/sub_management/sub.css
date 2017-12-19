@@ -17,12 +17,41 @@
     background-color: rgba(40, 96, 144, 0.8);
 }
 
+/* Settings */
+.sub .settings {
+    background-color: #353535;
+    position: fixed;
+    top: 55px;
+    right: 30px;
+    border-radius: 10px;
+    z-index: 5;
+    padding: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 560px;
+}
+.sub .settings button {
+    margin: 5px 0;
+    padding: 2px;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 27px;
+    height: 27px;
+    background-color: #286090;
+}
+.sub .settings.hideFields .row:not(.toggleSettings) {
+    display: none;
+}
+.sub .settings .take{
+    color:black;
+}
+
 /* Shows */
 .sub .search{
     float:left;
     height:40px;
 }
-.sub .settings {
+/*.sub .settings {
     float: left;
     height: 30px;
     margin-left: 15px;
@@ -33,7 +62,7 @@
 .sub .settings input[type='checkbox'] {
     position:relative;
     top:2px;
-}
+}*/
 .sub .search .searchInput {
     float: left;
     margin: 3px;

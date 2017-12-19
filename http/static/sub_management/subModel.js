@@ -1,7 +1,11 @@
 ﻿angular.module('webtools').service('subModel', function () {
-    this.settings = {
-        hideWithoutSub: false
+    this.settingsVisible = false;
+    this.settingsLoading = false;
+    this.defaultSettings = {
+        HideWithoutSub: false,
+        Take: 20
     };
+    this.settings = angular.copy(this.defaultSettings);
 
     this.shows = []; //THIS IS BOTH MOVIES & TV SHOWS
 

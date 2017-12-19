@@ -12,35 +12,73 @@
             return;
         }
 
-        var url = webtoolsModel.apiV3Url + "/settings/setSetting";
-        $http({
-            method: "PUT",
-            url: url,
-            data: {
-                HideWithoutSubs: subModel.settings.hideWithoutSub
-            }
-        }).then(function (resp) {
-            if (callback) callback(resp.data);
-        }, function (errorResp) {
-            webtoolsService.log("subService.setSettings - " + webtoolsService.formatError(errorResp), "Sub", true, url);
-        });
+        var total = 0;
+        for (var key in subModel.settings) {
+            total++;
+        }
+
+        var callsdone = 0;
+        for (var key in subModel.settings) {
+            var value = subModel.settings[key];
+            var data = {};
+            data[key] = value;
+
+            var url = webtoolsModel.apiV3Url + "/settings/setSetting";
+            $http({
+                method: "PUT",
+                url: url,
+                data: data
+            }).then(function (resp) {
+                callsdone++;
+                if (callback && callsdone === total) callback(resp.data);
+            }, function (errorResp) {
+                webtoolsService.log("subService.setSettings - " + webtoolsService.formatError(errorResp), "Sub", true, url);
+            });
+        }
     }
 
-    this.getSettings = function (callback) {
-        var url = webtoolsModel.apiV3Url + "/settings/getSettings/HideWithoutSubs";
+    this.getSetting = function (key, callback) {
+        var url = webtoolsModel.apiV3Url + "/settings/getSettings/" + key;
         $http({
             method: "GET",
             url: url,
         }).then(function (resp) {
             if (!subModel.settings) {
-                subModel.settings = {}
+                subModel.settings = angular.copy(subModel.defaultSettings);
             }
-            subModel.settings.hideWithoutSub = resp.data;
+            if (key === "Take") {
+                try { resp.data = parseInt(resp.data); } catch (ex) { resp.data = subModel.defaultSettings.Take; }
+            }
+            subModel.settings[key] = resp.data;
 
             if (callback) callback(resp.data);
         }, function (errorResp) {
-            webtoolsService.log("subService.getSettings - " + webtoolsService.formatError(errorResp), "Sub", true, url);
+            //TODO: getSettings should not return 500 if setting is not found
+            //webtoolsService.log("subService.getSettings - " + webtoolsService.formatError(errorResp), "Sub", true, url);
         });
+    }
+
+    this.getSettings = function (callback) {
+        var total = 0;
+        for (var key in subModel.settings) {
+            total++;
+        }
+
+        var callsdone = 0;
+        for (var key in subModel.settings) {
+            _this.getSetting(key, function () {
+                callsdone++;
+                if (callsdone === total) {
+                    _this.setSettings();
+                    if (callback) callback();
+                }
+            });
+        }
+    }
+
+    this.resetSettings = function (callback) {
+        subModel.settings = angular.copy(subModel.defaultSettings);
+        _this.setSettings(callback);
     }
 
 
@@ -98,7 +136,7 @@
 
     this.getMovieDetails = function (show, callback) {
         var skip = (show.skip ? show.skip : 0);
-        var take = 20;
+        var take = subModel.settings.Take;
 
         show.loading++;
         var url = webtoolsModel.apiV3Url + "/pms/getSection/key/" + show.key + "/start/" + skip + "/size/" + take + "/getSubs/title/" + subModel.searchValue;
@@ -126,7 +164,7 @@
 
     this.getTvShowDetails = function (show, callback) {
         var skip = (show.skip ? show.skip : 0);
-        var take = 30;
+        var take = subModel.settings.Take;
 
         show.loading++;
         var url = webtoolsModel.apiV3Url + "/pms/getSection/key/" + show.key + "/start/" + skip + "/size/" + take + "/title/" + subModel.searchValue;

@@ -14,6 +14,7 @@
     background-color: #286090;
 }
 
+/* Settings */
 .fm .settings{
     background-color: #353535;
     position: fixed;
@@ -44,7 +45,7 @@
     color:black;
 }
 
-
+/* Sections */
 .fm .sections{
 }
 
