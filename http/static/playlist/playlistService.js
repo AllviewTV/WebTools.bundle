@@ -78,7 +78,6 @@
             method: "POST",
             url: url
         }).then(function (resp) {
-            debugger;
             if (callback) callback(resp.data);
             webtoolsModel.playlistsLoading--;
         }, function (errorResp) {
